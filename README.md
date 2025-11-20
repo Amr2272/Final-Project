@@ -51,12 +51,11 @@ Beyond standard modeling, this repository implements a **production-ready archit
 ├── models/                 \# Serialized models (.pkl files)  
 │   ├── prophet\_tuned\_model.pkl  
 │   └── ...  
-├── src/  
-│   ├── preprocessing.py    \# Data cleaning and transformation pipeline  
-│   ├── EDA.py              \# Exploratory Data Analysis scripts  
-│   ├── best\_model.py       \# Prophet model training and configuration  
-│   ├── Monitoring.py       \# Drift detection and model health checks  
-│   └── DashBoard.py        \# Plotly Dash visualization components  
+├──  preprocessing.py    \# Data cleaning and transformation pipeline  
+├──  EDA.py              \# Exploratory Data Analysis scripts  
+├──  best\_model.py       \# Prophet model training and configuration  
+├──  Monitoring.py       \# Drift detection and model health checks  
+├──  DashBoard.py        \# Plotly Dash visualization components  
 ├── streamlit.py            \# Main entry point for the Web App  
 ├── requirements.txt        \# Python dependencies  
 └── README.md               \# Project documentation
