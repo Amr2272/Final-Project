@@ -30,7 +30,7 @@ class PredictionMode:
 @st.cache_data
 def load_data():
     try:
-        train = pd.read_csv('Data.zip')
+        train = pd.read_csv('Data_cleaned.zip')
     except FileNotFoundError:
        return('Error When Loading Data')
     
@@ -578,4 +578,5 @@ if __name__ == '__main__':
             st.session_state.alert_status = None
         run_dashboard(train, min_date, max_date, sort_state)
     elif app_mode == "Time Series Forecast":
+
         run_forecast_app(model, prophet_df)
