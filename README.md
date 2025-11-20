@@ -70,7 +70,7 @@ Beyond standard modeling, this repository implements a **production-ready archit
 
 ### **Step 1: Clone the Repository**
 
-git clone \[https://github.com/your-username/store-sales-forecasting.git\](https://github.com/your-username/store-sales-forecasting.git)  
+git clone \[[https://github.com/your-username/store-sales-forecasting.git\](https://github.com/your-username/store-sales-forecasting.git](https://github.com/Amr2272/Final-Project.git))  
 cd store-sales-forecasting
 
 ### **Step 2: Install Dependencies**
