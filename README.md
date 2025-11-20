@@ -58,8 +58,9 @@ Beyond standard modeling, this repository implements a **production-ready archit
 ├──  DashBoard.py        \# Plotly Dash visualization components  
 ├── streamlit.py            \# Main entry point for the Web App  
 ├── requirements.txt        \# Python dependencies  
+├── monitoring_log.csv 
+├── monitoring_dashboard.png 
 └── README.md               \# Project documentation
-
 ## **🚀 Installation & Setup**
 
 ### **Prerequisites**
