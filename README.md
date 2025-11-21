@@ -47,27 +47,27 @@ Beyond standard modeling, this repository implements a **production-ready archit
 
 ## **📂 Project Structure**
 
-├── data/                   \# Raw CSV files (train, test, holidays, etc.)  
-├── models/                 \# Serialized models (.pkl files)  
-├──scr/
-  ├── preprocessing.py    \# Data cleaning and transformation pipeline  
-  ├──  EDA.py              \# Exploratory Data Analysis scripts  
-  ├──  best\_model.py       \# Prophet model training and configuration  
-  ├──   Monitoring.py       \# Drift detection and model health checks  
-  ├── DashBoard.py        \# Plotly Dash visualization components  
-  ├── streamlit.py            \# Main entry point for the Web App  
-  ├── prophet_tuned_model.pkl            \# Best model tuneed pkl file
+├── data/                    \# Raw CSV files (train, test, holidays, etc.)  
+├── models/                  \# Serialized models (.pkl files)  
+├── src/                               # Renamed from 'scr' (optional)
+│   ├── preprocessing.py
+│   ├── EDA.py
+│   ├── best_model.py
+│   ├── Monitoring.py
+│   ├── DashBoard.py
+│   └── streamlit.py
+│   └──  prophet_tuned_model.pkl            \# Best model tuneed pkl file
 ├── logs/
-  ├── monitoring_log.csv 
+│   └── monitoring_log.csv
 ├── reports/
-  ├──cleaned Dataset and Analysis Report/Data Cleaning and Analysis Report, Store Sales (2013–2017).docx
-  ├──Data Exploration Report/Data Exploration Report.docx
-  ├──Forecasting Model Performance Report/Model Performance Report.docx
-  ├──Monitoring Setup Report/Monitoring Setup Report.docx
-  ├──Final Report/Final Report.docx
-  ├── monitoring_dashboard.png 
-├── requirements.txt        \# Python dependencies  
-└── README.md               \# Project documentation
+│   ├── cleaned Dataset and Analysis Report/
+│   ├── Data Exploration Report/
+│   ├── Forecasting Model Performance Report/
+│   ├── Monitoring Setup Report/
+│   ├── Final Report/
+│   └── monitoring_dashboard.png
+├── requirements.txt
+└── README.md
 ## **🚀 Installation & Setup**
 
 ### **Prerequisites**
