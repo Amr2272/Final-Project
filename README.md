@@ -47,27 +47,27 @@ Beyond standard modeling, this repository implements a **production-ready archit
 
 ## **📂 Project Structure**
 .
-├── data/                    \# Raw CSV files (train, test, holidays, etc.)  
-├── models/                  \# Serialized models (.pkl files)  
-├── src/                               # Renamed from 'scr' (optional)
-│   ├── preprocessing.py
-│   ├── EDA.py
-│   ├── best_model.py
-│   ├── Monitoring.py
-│   ├── DashBoard.py
-│   └── streamlit.py
-│   └──  prophet_tuned_model.pkl            \# Best model tuneed pkl file
+├── data/                    # Raw input files (train, test, holidays, etc.)
+├── models/                  # Serialized models (.pkl files)
+├── src/                      # Contains all core Python source code
+│   ├── preprocessing.py    # Data cleaning and transformation pipeline
+│   ├── EDA.py              # Exploratory Data Analysis scripts
+│   ├── best_model.py       # Prophet model training and configuration
+│   ├── Monitoring.py       # Drift detection and model health checks
+│   ├── DashBoard.py        # Plotly Dash visualization components
+│   └── streamlit.py        # Main entry point for the Streamlit Web App
+│   └── prophet_tuned_model.pkl    
 ├── logs/
-│   └── monitoring_log.csv
+│   └── monitoring_log.csv  # Logs tracking model performance and drift
 ├── reports/
-│   ├── cleaned Dataset and Analysis Report/
-│   ├── Data Exploration Report/
-│   ├── Forecasting Model Performance Report/
-│   ├── Monitoring Setup Report/
-│   ├── Final Report/
-│   └── monitoring_dashboard.png
-├── requirements.txt
-└── README.md
+│   ├── cleaned Dataset and Analysis Report/  # Detailed Data Cleaning Report
+│   ├── Data Exploration Report/             # Summary of EDA findings
+│   ├── Forecasting Model Performance Report/ # Report on model metrics and validation
+│   ├── Monitoring Setup Report/            # Documentation of monitoring pipeline setup
+│   ├── Final Report/                       # Comprehensive project final document
+│   └── monitoring_dashboard.png            # Screenshot of the monitoring dashboard
+├── requirements.txt        # Python dependencies required for the project
+└── README.md               # Project documentation
 ## **🚀 Installation & Setup**
 
 ### **Prerequisites**
