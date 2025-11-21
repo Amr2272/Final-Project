@@ -46,7 +46,7 @@ Beyond standard modeling, this repository implements a **production-ready archit
 * **Analytics (DashBoard.py):** Detailed Dash/Plotly visualizations for deep-dive analytics.
 
 ## **📂 Project Structure**
-
+.
 ├── data/                    \# Raw CSV files (train, test, holidays, etc.)  
 ├── models/                  \# Serialized models (.pkl files)  
 ├── src/                               # Renamed from 'scr' (optional)
