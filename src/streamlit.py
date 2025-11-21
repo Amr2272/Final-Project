@@ -11,7 +11,7 @@ from typing import Dict, List, Optional
 import json
 
 st.set_page_config(layout="wide", page_title="Data Analysis & Forecast App", page_icon="📊")
-MODEL_PATH = 'prophet_tuned_model.pkl'
+MODEL_PATH = 'prophet.pkl'
 
 # ============================================================================
 # PREDICTION MODE CONFIGURATION
@@ -30,7 +30,7 @@ class PredictionMode:
 @st.cache_data
 def load_data():
     try:
-        train = pd.read_csv('Data_cleaned.zip')
+        train = pd.read_csv('Data.zip')
     except FileNotFoundError:
        return('Error When Loading Data')
     
@@ -293,7 +293,7 @@ def run_dashboard(train, min_date, max_date, sort_state):
             fig.update_xaxes(title_font=dict(size=14))
             fig.update_layout(title_font_size=20)
 
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
 
     except Exception as e:
         st.error(f"An error occurred while processing data: {str(e)}")
@@ -436,6 +436,110 @@ def run_forecast_app(model, prophet_df):
             with col4:
                 st.metric("Upper Bound", f"{latest['upper_bound']:,.0f}")
             
+            # ===================================================================
+            # REAL-TIME VISUALIZATION (Similar to Batch)
+            # ===================================================================
+            st.markdown("---")
+            st.subheader("Forecast Visualization")
+            
+            # Generate forecast data including historical fit for visualization
+            last_train_date = prophet_df['ds'].max()
+            target_date_dt = pd.to_datetime(latest['date'])
+            periods_to_target = (target_date_dt - last_train_date).days
+            
+            if periods_to_target > 0:
+                # Generate full forecast up to target date
+                forecast_full = batch_predict(model, periods_to_target, include_history=True)
+                
+                # Create the visualization
+                fig_rt = go.Figure()
+
+                # Historical data points
+                fig_rt.add_trace(go.Scatter(
+                    x=prophet_df['ds'],
+                    y=prophet_df['y'],
+                    mode='markers',
+                    name='Historical Data (Actual)',
+                    marker=dict(color='blue', size=4)
+                ))
+                
+                # Forecast line
+                fig_rt.add_trace(go.Scatter(
+                    x=forecast_full['ds'],
+                    y=forecast_full['yhat'],
+                    mode='lines',
+                    name='Forecast (Predicted)',
+                    line=dict(color='#1abc9c', width=2)
+                ))
+
+                # Confidence interval
+                fig_rt.add_trace(go.Scatter(
+                    x=pd.concat([forecast_full['ds'], forecast_full['ds'].iloc[::-1]]),
+                    y=pd.concat([forecast_full['yhat_upper'], forecast_full['yhat_lower'].iloc[::-1]]),
+                    fill='toself',
+                    fillcolor='rgba(27, 188, 156, 0.2)',
+                    line=dict(color='rgba(255,255,255,0)'),
+                    hoverinfo="skip",
+                    name='80% Confidence Interval'
+                ))
+                
+                # Highlight all prediction points from history
+                if st.session_state.real_time_predictions:
+                    # Extract all predictions that fall within or after the forecast range
+                    all_predictions = []
+                    for pred in st.session_state.real_time_predictions:
+                        pred_date = pd.to_datetime(pred['date'])
+                        if pred_date > last_train_date:
+                            all_predictions.append({
+                                'date': pred_date,
+                                'value': pred['prediction']
+                            })
+                    
+                    if all_predictions:
+                        pred_df = pd.DataFrame(all_predictions)
+                        fig_rt.add_trace(go.Scatter(
+                            x=pred_df['date'],
+                            y=pred_df['value'],
+                            mode='markers',
+                            name='Real-Time Predictions',
+                            marker=dict(
+                                color='red', 
+                                size=12, 
+                                symbol='star',
+                                line=dict(color='white', width=2)
+                            ),
+                            hovertemplate='<b>Predicted Date:</b> %{x}<br><b>Value:</b> %{y:,.0f}<extra></extra>'
+                        ))
+                else:
+                    # If no predictions in history, just show the current one
+                    fig_rt.add_trace(go.Scatter(
+                        x=[target_date_dt],
+                        y=[latest['prediction']],
+                        mode='markers',
+                        name='Target Prediction',
+                        marker=dict(color='red', size=12, symbol='star', line=dict(color='white', width=2)),
+                        hovertemplate='<b>Predicted Date:</b> %{x}<br><b>Value:</b> %{y:,.0f}<extra></extra>'
+                    ))
+
+                fig_rt.update_layout(
+                    title=f'Historical Data and Forecast to {latest["date"].strftime("%Y-%m-%d")}',
+                    xaxis_title='Date',
+                    yaxis_title='Value',
+                    title_font_size=20,
+                    hovermode='x unified'
+                )
+                
+                st.plotly_chart(fig_rt, use_container_width=True)
+                
+                # Model Components (similar to batch)
+                st.subheader("Model Components")
+                fig_components = model.plot_components(forecast_full)
+                st.write(fig_components)
+            
+            # ===================================================================
+            # END OF VISUALIZATION
+            # ===================================================================
+            
             # Show JSON response (API simulation)
             with st.expander("🔍 View API Response (JSON)"):
                 st.json(latest)
@@ -447,7 +551,7 @@ def run_forecast_app(model, prophet_df):
                 history_df['date'] = pd.to_datetime(history_df['date']).dt.strftime('%Y-%m-%d')
                 st.dataframe(
                     history_df[['date', 'prediction', 'lower_bound', 'upper_bound']],
-                    width='stretch'
+                    use_container_width=True
                 )
 
 
@@ -488,7 +592,7 @@ def display_forecast_results(forecast_data, forecast_future, model_fit, prophet_
             forecast_future[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].rename(
                 columns={'ds': 'Date', 'yhat': 'Forecast Value', 'yhat_lower': 'Lower Bound', 'yhat_upper': 'Upper Bound'}
             ).set_index('Date').style.format({'Forecast Value': "{:,.0f}", 'Lower Bound': "{:,.0f}", 'Upper Bound': "{:,.0f}"}),
-            width='stretch'
+            use_container_width=True
         )
     else:
         st.warning("No future dates found in the forecast data.")
@@ -531,7 +635,7 @@ def display_forecast_results(forecast_data, forecast_future, model_fit, prophet_
         title_font_size=20
     )
     
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
 
     # Components
     st.subheader("Model Components")
@@ -578,5 +682,5 @@ if __name__ == '__main__':
             st.session_state.alert_status = None
         run_dashboard(train, min_date, max_date, sort_state)
     elif app_mode == "Time Series Forecast":
-
         run_forecast_app(model, prophet_df)
+
