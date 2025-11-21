@@ -49,17 +49,24 @@ Beyond standard modeling, this repository implements a **production-ready archit
 
 ├── data/                   \# Raw CSV files (train, test, holidays, etc.)  
 ├── models/                 \# Serialized models (.pkl files)  
-│   ├── prophet\_tuned\_model.pkl  
-│   └── ...  
-├──  preprocessing.py    \# Data cleaning and transformation pipeline  
-├──  EDA.py              \# Exploratory Data Analysis scripts  
-├──  best\_model.py       \# Prophet model training and configuration  
-├──  Monitoring.py       \# Drift detection and model health checks  
-├──  DashBoard.py        \# Plotly Dash visualization components  
-├── streamlit.py            \# Main entry point for the Web App  
+├──scr/
+  ├── preprocessing.py    \# Data cleaning and transformation pipeline  
+  ├──  EDA.py              \# Exploratory Data Analysis scripts  
+  ├──  best\_model.py       \# Prophet model training and configuration  
+  ├──   Monitoring.py       \# Drift detection and model health checks  
+  ├── DashBoard.py        \# Plotly Dash visualization components  
+  ├── streamlit.py            \# Main entry point for the Web App  
+  ├── prophet_tuned_model.pkl            \# Best model tuneed pkl file
+├──logs/
+  ├── monitoring_log.csv 
+├──reports/
+  ├──cleaned Dataset and Analysis Report/Data Cleaning and Analysis Report, Store Sales (2013–2017).docx
+  ├──Data Exploration Report/Data Exploration Report.docx
+  ├──Forecasting Model Performance Report/Model Performance Report.docx
+  ├──Monitoring Setup Report/Monitoring Setup Report.docx
+  ├──Final Report/Final Report.docx
+  ├── monitoring_dashboard.png 
 ├── requirements.txt        \# Python dependencies  
-├── monitoring_log.csv 
-├── monitoring_dashboard.png 
 └── README.md               \# Project documentation
 ## **🚀 Installation & Setup**
 
