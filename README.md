@@ -57,9 +57,9 @@ Beyond standard modeling, this repository implements a **production-ready archit
   ├── DashBoard.py        \# Plotly Dash visualization components  
   ├── streamlit.py            \# Main entry point for the Web App  
   ├── prophet_tuned_model.pkl            \# Best model tuneed pkl file
-├──logs/
+├── logs/
   ├── monitoring_log.csv 
-├──reports/
+├── reports/
   ├──cleaned Dataset and Analysis Report/Data Cleaning and Analysis Report, Store Sales (2013–2017).docx
   ├──Data Exploration Report/Data Exploration Report.docx
   ├──Forecasting Model Performance Report/Model Performance Report.docx
