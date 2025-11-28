@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import zipfile
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 import warnings
 warnings.filterwarnings('ignore')
@@ -13,28 +14,28 @@ HOLIDAY_PRIORITY = {
     'Event': 3
 }
 
-def load_and_clean_auxiliary_data(data_path=r"path"):
-    train = pd.read_csv(f"{data_path}/train.csv", parse_dates=["date"])
-    test = pd.read_csv(f"{data_path}/test.csv", parse_dates=["date"])
-    stores = pd.read_csv(f"{data_path}/stores.csv")
-    transactions = pd.read_csv(f"{data_path}/transactions.csv", parse_dates=["date"])
-    holidays = pd.read_csv(f"{data_path}/holidays_events.csv", parse_dates=["date"])
-    oil = pd.read_csv(f"{data_path}/oil.csv", parse_dates=["date"])
+def load_and_clean_auxiliary_data():
+    with zipfile.ZipFile('Origin_Data.zip', 'r') as zip_ref:
+        train = pd.read_csv(zip_ref.open('train.csv'), parse_dates=["date"])
+        test = pd.read_csv(zip_ref.open('test.csv'), parse_dates=["date"])
+        stores = pd.read_csv(zip_ref.open('stores.csv'))
+        holidays = pd.read_csv(zip_ref.open('holidays_events.csv'), parse_dates=["date"])
+        oil = pd.read_csv(zip_ref.open('oil.csv'), parse_dates=["date"])
+
 
     holidays = holidays[holidays["transferred"] == False].copy()
     holidays["priority"] = holidays["type"].map(HOLIDAY_PRIORITY)
     idx = holidays.groupby("date")["priority"].idxmax()
     holidays = holidays.loc[idx].reset_index(drop=True)
     holidays = holidays.drop("transferred", axis=1)
-
-    oil["dcoilwtico"] = oil["dcoilwtico"].fillna(method="ffill")
     
-    return train, test, stores, transactions, holidays, oil
+    oil["dcoilwtico"] = oil["dcoilwtico"].ffill()
+    
+    return train, test, stores, holidays, oil
 
 
-def merge_auxiliary_data(df, stores, transactions, holidays, oil):
+def merge_auxiliary_data(df, stores, holidays, oil):
     df = df.merge(stores, on="store_nbr", how="left")
-    df = df.merge(transactions, on=["date", "store_nbr"], how="left")
     df = df.merge(oil, on="date", how="left")
     df = df.merge(holidays[["date", "type"]], on="date", how="left")
 
@@ -49,6 +50,7 @@ def merge_auxiliary_data(df, stores, transactions, holidays, oil):
 
 
 def extract_time_features(df):
+    df['date'] = pd.to_datetime(df['date'])
     df["Year"] = df["date"].dt.year
     df["Month"] = df["date"].dt.month
     df["Day"] = df["date"].dt.day
@@ -65,6 +67,7 @@ def handle_train_specific_features(train_df, test_df):
     test_df["onpromotion"] = np.log1p(test_df["onpromotion"])
     
     return train_df, test_df
+
 
 def encode_and_scale_data(train_df, test_df):
     le = LabelEncoder()
@@ -100,19 +103,17 @@ def encode_and_scale_data(train_df, test_df):
 
     return train_encoded, test_encoded
 
-def full_preprocessing_pipeline(data_path="."):
-    train_raw, test_raw, stores, transactions, holidays_cleaned, oil_cleaned = load_and_clean_auxiliary_data(data_path)
 
-    train_merged = merge_auxiliary_data(train_raw, stores, transactions, holidays_cleaned, oil_cleaned)
-    test_merged = merge_auxiliary_data(test_raw, stores, transactions, holidays_cleaned, oil_cleaned)
+def full_preprocessing_pipeline(data_path="."):
+    train_raw, test_raw, stores, holidays_cleaned, oil_cleaned = load_and_clean_auxiliary_data()
+
+    train_merged = merge_auxiliary_data(train_raw, stores, holidays_cleaned, oil_cleaned)
+    test_merged = merge_auxiliary_data(test_raw, stores, holidays_cleaned, oil_cleaned)
 
     train_fe = extract_time_features(train_merged)
     test_fe = extract_time_features(test_merged)
 
     train_cleaned, test_cleaned = handle_train_specific_features(train_fe, test_fe)
-
-    train_cleaned = train_cleaned.drop("transactions", axis=1, errors='ignore')
-    test_cleaned = test_cleaned.drop("transactions", axis=1, errors='ignore')
 
     df_final, test_final = encode_and_scale_data(train_cleaned, test_cleaned)
 
@@ -123,4 +124,3 @@ def save_data(train_df, df_final, test_final, output_path="."):
     train_df.to_csv(f"{output_path}/train_cleaned.csv", index=False)
     df_final.to_csv(f"{output_path}/train_encoded.csv", index=True)
     test_final.to_csv(f"{output_path}/test_encoded.csv", index=True)
-
