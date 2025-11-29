@@ -5,9 +5,6 @@ from prophet import Prophet
 from sklearn.model_selection import ParameterGrid
 from statsmodels.tsa.stattools import adfuller
 import pickle
-from Monitoring import (
-    integrate_monitoring_with_prophet,
-    continuous_monitoring_workflow)
 
 import matplotlib.pyplot as plt
 
@@ -312,49 +309,7 @@ def train_best_model(train, holidays, best_params):
 
 
 # ======================================================
-# STEP 9 – MONITORING
-# ======================================================
-def run_monitoring(train, test, model):
-    """
-    Initialize and run monitoring system.
-    """
-    print("\nInitializing monitoring system...")
-    
-    forecast = model.predict(test[['ds']])
-    forecast = forecast[['ds', 'yhat']].merge(test[['ds', 'y']], on='ds')
-    
-    monitor = integrate_monitoring_with_prophet(train, test, model, forecast)
-    
-    health = monitor.check_model_health()
-    print("\n" + "="*60)
-    print("MODEL HEALTH CHECK")
-    print(f"Status: {health['status'].upper()}")
-    print("="*60)
-    
-    return monitor
-
-
-def monitoring_update(monitor, test, model, new_date="2025-01-01"):
-    """
-    Update monitoring with new prediction.
-    """
-    new_date = pd.to_datetime(new_date)
-    new_predicted = float(model.predict(pd.DataFrame({'ds': [new_date]}))['yhat'].iloc[0])
-    new_actual = float(test['y'].iloc[-1])
-    
-    status = continuous_monitoring_workflow(
-        monitor=monitor,
-        new_actual=new_actual,
-        new_predicted=new_predicted,
-        new_date=new_date
-    )
-    
-    print(f"Monitoring Status: {status}")
-    return status
-
-
-# ======================================================
-# STEP 10 – SAVE TRAINED MODEL
+# STEP 9 – SAVE TRAINED MODEL
 # ======================================================
 def save_model(model, filename="prophet_model.pkl"):
     """
@@ -376,35 +331,35 @@ def main():
     print("="*60)
     
     # Step 1: Load and preprocess data
-    print("\n[1/10] Loading and preprocessing data...")
+    print("\n[1/9] Loading and preprocessing data...")
     train_cleaned, train_encoded, test_encoded = load_and_preprocess()
     
     # Step 2: Prepare time series
-    print("\n[2/10] Preparing time series data...")
+    print("\n[2/9] Preparing time series data...")
     daily_ts = prepare_time_series(train_cleaned)
     
     # Step 3: Split data
-    print("\n[3/10] Splitting data for Prophet...")
+    print("\n[3/9] Splitting data for Prophet...")
     train, test = split_for_prophet(daily_ts)
     
     # Step 4: Build holidays
-    print("\n[4/10] Building holidays dataframe...")
+    print("\n[4/9] Building holidays dataframe...")
     holidays = build_holidays(train)
     
     # Step 5: Train base model
-    print("\n[5/10] Training base Prophet model...")
+    print("\n[5/9] Training base Prophet model...")
     base_model = train_prophet_model(train, holidays)
     
     # Step 6: Generate forecast
-    print("\n[6/10] Generating forecasts...")
+    print("\n[6/9] Generating forecasts...")
     forecast = forecast_and_plot(base_model, test)
     
     # Step 7: Calculate metrics
-    print("\n[7/10] Calculating evaluation metrics...")
+    print("\n[7/9] Calculating evaluation metrics...")
     mae, rmse, mape = calculate_metrics(test, forecast)
     
     # Step 8: Hyperparameter tuning (optional - uncomment if needed)
-    print("\n[8/10] Hyperparameter tuning...")
+    print("\n[8/9] Hyperparameter tuning...")
     tune = input("Perform hyperparameter tuning? (y/n): ").lower()
     if tune == 'y':
         best_params = tune_prophet(train, test, holidays)
@@ -413,19 +368,16 @@ def main():
         print("Skipping tuning, using base model as final model")
         final_model = base_model
     
-    # Step 9: Monitoring
-    print("\n[9/10] Setting up monitoring system...")
-    monitor = run_monitoring(train, test, final_model)
     
-    # Step 10: Save model
-    print("\n[10/10] Saving final model...")
+    # Step 9: Save model
+    print("\n[9/9] Saving final model...")
     save_model(final_model)
     
     print("✓ PIPELINE COMPLETE!")
     print("="*60)
     
-    return final_model, monitor
+    return final_model
 
 
 if __name__ == "__main__":
-    model, monitor = main()
+    model = main()
