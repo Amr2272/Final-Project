@@ -77,28 +77,27 @@ Beyond standard modeling, this repository implements a **production-ready MLOps 
 
 ```
 .
-├── data/                    # Raw input files (train, test, holidays, etc.)
-├── models/                  # Serialized models (.pkl files)
-├── mlflow/
-│   ├── mlflow.rar/          
-├── src/                     # Contains all core Python source code
-│   ├── preprocessing.py    # Data cleaning and transformation pipeline
-│   ├── EDA.py              # Exploratory Data Analysis scripts
-│   ├── best_model.py       # Prophet model training and configuration
-│   ├── Monitoring.py       # Drift detection and model health checks
-│   ├── DashBoard.py        # Plotly Dash visualization components
-│   └── streamlit.py        # Main entry point for the Streamlit Web App
-├── logs/
-│   └── monitoring_log.csv  # Logs tracking model performance and drift
-├── reports/
+├── Live Demo/
+│   └── Final Project.rar       # Complete project package (MLflow + DVC + Streamlit)
+├── data/                        # Raw input files (train, test, holidays, etc.)
+├── models/                      # Serialized models (.pkl files)
+├── proposal/                    # Project proposal documents
+├── reports/                     # Analysis and performance reports
 │   ├── cleaned Dataset and Analysis Report/
 │   ├── Data Exploration Report/
 │   ├── Forecasting Model Performance Report/
 │   ├── Monitoring Setup Report/
-│   ├── MLOps Report/       # MLOps infrastructure documentation
+│   ├── MLOps Report/
 │   └── Final Report/
-├── requirements.txt        # Python dependencies
-└── README.md               # Project documentation
+├── src/                         # Core Python source code
+│   ├── preprocessing.py         # Data cleaning and transformation pipeline
+│   ├── EDA.py                   # Exploratory Data Analysis scripts
+│   ├── best_model.py            # Prophet model training and configuration
+│   ├── Monitoring.py            # Drift detection and model health checks
+│   ├── DashBoard.py             # Plotly Dash visualization components
+│   └── streamlit.py             # Streamlit Web App components
+├── requirements.txt             # Python dependencies
+└── README.md                    # Project documentation
 ```
 
 ## **🚀 Installation & Setup**
@@ -109,56 +108,89 @@ Beyond standard modeling, this repository implements a **production-ready MLOps 
 * pip package manager
 * Git and DVC installed
 
-### **Step 1: Clone the Repository**
+### **Step 1: Extract the Live Demo Package**
+
+1. Navigate to the `Live Demo/` folder
+2. Extract `Final Project.rar` to `D:\Final Project`
+3. The extracted folder contains the complete MLflow, DVC, and Streamlit setup
+
+### **Step 2: Navigate to Project Directory**
 
 ```bash
-git clone https://github.com/Amr2272/Final-Project.git
-cd store-sales-forecasting
+cd "D:\Final Project"
 ```
 
-### **Step 2: Install Dependencies**
+### **Step 3: Install Dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### **Step 3: Data Setup**
+### **Step 4: Run the Application**
 
-**Option A: Pull from DVC Remote**
+To launch the complete application with all features:
+
+```bash
+python main.py
+```
+
+*This will start the MLflow server, initialize DVC, and launch the Streamlit interface.*
+
+### **Alternative: Manual Setup**
+
+If you prefer to set up components individually:
+
+**Clone the Repository:**
+```bash
+git clone https://github.com/Amr2272/Final-Project.git
+cd store-sales-forecasting
+```
+
+**Pull Data from DVC:**
 ```bash
 dvc pull
 ```
 
-**Option B: Manual Download**
-Download the dataset from [Kaggle](https://www.kaggle.com/c/store-sales-time-series-forecasting/data) and place files in the data/ folder.
-
-### **Step 4: MLflow Setup**
-
-Start the MLflow tracking server:
+**Start MLflow Server:**
 ```bash
 mlflow ui --backend-store-uri sqlite:///D:/Final_Project/mlflow_project/mlflow.db
 ```
-Access at: http://127.0.0.1:5000
 
 ## **🖥️ Usage**
 
-### **Running the Streamlit App**
+### **Quick Start (Recommended)**
 
-To launch the main forecasting interface:
+After extracting to `D:\Final Project`, simply run:
 
+```bash
+python main.py
+```
+
+This single command will:
+* Initialize the MLflow tracking server
+* Set up DVC data versioning
+* Launch the Streamlit web application
+* Configure all necessary connections
+
+The application will be accessible at http://localhost:8501
+
+### **Running Components Separately**
+
+**Streamlit App:**
 ```bash
 streamlit run streamlit.py
 ```
 
-*The app will open in your browser at http://localhost:8501.*
-
-### **Running the Analysis Dashboard**
-
-To view the detailed analytics dashboard:
-
+**Analysis Dashboard:**
 ```bash
 python DashBoard.py
 ```
+
+**MLflow UI:**
+```bash
+mlflow ui
+```
+Access at: http://127.0.0.1:5000
 
 ### **Training Models**
 
@@ -246,8 +278,6 @@ The project includes a drift detection mechanism implemented in Monitoring.py:
 ### **Web Frameworks**
 * **Frontend:** Streamlit, Dash
 
-
-
 ## **📄 License**
 
 This project is licensed under the MIT License - see the LICENSE file for details.
@@ -262,3 +292,9 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+## **📞 Support**
+
+For questions or issues:
+* Open an issue in the GitHub repository
+* Check the documentation in the `reports/` folder
+* Review MLflow experiments for model performance details
