@@ -3,14 +3,14 @@ pandas
 numpy
 scipy
 scikit-learn
-joblib
 matplotlib
 seaborn
 plotly
 dash
-statsmodels  
+statsmodels
 prophet
 xgboost
 lightgbm
-DVC
+dvc
 mlflow
+python-dotenv
