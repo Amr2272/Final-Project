@@ -64,9 +64,20 @@ Beyond standard modeling, this repository implements a **production-ready MLOps 
 
 ### **5. Model Monitoring (Monitoring.py)**
 
-* A custom ProphetModelMonitor class.
-* Detects **Concept Drift** by comparing live metrics against baseline MAE/RMSE.
-* Provides severity alerts (Healthy, Warning, Drift Detected) and retraining recommendations.
+* Real-time Prediction Tracking: Automated comparison of predictions vs. actual sales with point-by-point live visualization.
+MLflow Integration: Directly fetches predictions from MLflow runs and compares against actual dataset (actual_dataset.csv).
+* Drift Detection: Monitors prediction errors (MAE, RMSE, MAPE) and triggers alerts when errors exceed 25% of actual values.
+* Email Alert System: Automated email notifications sent to configured recipients when high prediction errors are detected.
+*Interactive Dashboard: Streamlit-based interface featuring:
+
+*  Live animated charts showing prediction vs. actual comparison
+*  Error distribution and trend analysis
+*  Scatter plots for prediction accuracy visualization
+*  Historical prediction generation for testing
+
+
+* Performance Metrics: Tracks Mean Absolute Error (MAE), Root Mean Square Error (RMSE), Mean Absolute Percentage Error (MAPE), and overall prediction accuracy.
+* Automated Stopping: Processing halts immediately upon detecting critical errors (>25% deviation) with visual and email alerts.
 
 ### **6. Interactive Dashboards**
 
