@@ -173,7 +173,7 @@ mlflow ui --backend-store-uri sqlite:///D:/Final_Project/mlflow_project/mlflow.d
 After extracting to `D:\Final Project`, simply run:
 
 ```bash
-python main.py
+streamlit run main.py
 ```
 
 This single command will:
@@ -186,9 +186,9 @@ The application will be accessible at http://localhost:8501
 
 ### **Running Components Separately**
 
-**Streamlit App:**
+**EDA:**
 ```bash
-streamlit run streamlit.py
+python3 EDA.py
 ```
 
 **Analysis Dashboard:**
