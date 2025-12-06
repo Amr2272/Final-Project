@@ -90,7 +90,7 @@ MLflow Integration: Directly fetches predictions from MLflow runs and compares a
 .
 ├── Live Demo/
 │   └── Final Project.rar       # Complete project package (MLflow + DVC + Streamlit)
-├── data/                        # Raw input files (train, test, holidays, etc.)
+├── data/                        # Raw input files (train, test, holidays, etc.) in Origin Data.zip , Clean Data in Data_cleaned.zip
 ├── models/                      # Serialized models (.pkl files)
 ├── proposal/                    # Project proposal documents
 ├── reports/                     # Analysis and performance reports
@@ -104,11 +104,10 @@ MLflow Integration: Directly fetches predictions from MLflow runs and compares a
 │   ├── preprocessing.py         # Data cleaning and transformation pipeline
 │   ├── EDA.py                   # Exploratory Data Analysis scripts
 │   ├── best_model.py            # Prophet model training and configuration
-│   ├── Monitoring.py            # Drift detection and model health checks
 │   ├── DashBoard.py             # Plotly Dash visualization components
-│   └── streamlit.py             # Streamlit Web App components
 ├── requirements.txt             # Python dependencies
 └── README.md                    # Project documentation
+└── DEPI Final Project. PPT Template.pptx                    # Project Presentation
 ```
 
 ## **🚀 Installation & Setup**
