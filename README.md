@@ -141,7 +141,7 @@ pip install -r requirements.txt
 To launch the complete application with all features:
 
 ```bash
-python main.py
+streamlit run main.py
 ```
 
 *This will start the MLflow server, initialize DVC, and launch the Streamlit interface.*
